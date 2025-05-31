@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import AccountAvatar from './AccountAvatar';
 import Logo from './Logo';
+import { ColorModeButton } from './ui/ColorMode';
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -11,11 +12,20 @@ const HeaderDiv = styled.div`
   align-items: center;
 `;
 
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
 const Header: React.FC = () => {
   return (
     <HeaderDiv>
       <Logo />
-      <AccountAvatar />
+      <RightSection>
+        <AccountAvatar />
+        <ColorModeButton aria-label="Toggle color mode" />
+      </RightSection>
     </HeaderDiv>
   );
 };
