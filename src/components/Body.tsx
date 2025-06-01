@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import OfficePicker from './OfficePicker';
+import { OfficePicker } from './OfficePicker';
 
 const BodyDiv = styled.div`
   width: 100%;
@@ -16,4 +16,4 @@ const Body: React.FC = () => {
   );
 };
 
-export default Body;
+export { Body };

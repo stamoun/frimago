@@ -10,4 +10,4 @@ const Footer: React.FC = () => {
   return <FooterDiv>&copy; Frima Studio</FooterDiv>;
 };
 
-export default Footer;
+export { Footer };

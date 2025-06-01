@@ -1,9 +1,10 @@
 import { Theme } from '@chakra-ui/react';
 import styled from 'styled-components';
-import Body from './components/Body';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import { Provider } from './components/ui/provider';
+import { Body } from './components/Body';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Providers } from './components/providers';
+import './utils/axiosWrapper';
 
 const AppDiv = styled.div`
   width: 100%;
@@ -12,18 +13,16 @@ const AppDiv = styled.div`
   min-height: 100vh;
 `;
 
-const App: React.FC = () => {
-  return (
-    <Provider>
-      <Theme>
-        <AppDiv>
-          <Header />
-          <Body />
-          <Footer />
-        </AppDiv>
-      </Theme>
-    </Provider>
-  );
-};
+const App: React.FC = () => (
+  <Providers>
+    <Theme>
+      <AppDiv>
+        <Header />
+        <Body />
+        <Footer />
+      </AppDiv>
+    </Theme>
+  </Providers>
+);
 
-export default App;
+export { App };

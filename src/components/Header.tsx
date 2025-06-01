@@ -1,7 +1,8 @@
+import { HStack } from '@chakra-ui/react';
 import React from 'react';
 import styled from 'styled-components';
-import AccountAvatar from './AccountAvatar';
-import Logo from './Logo';
+import { Logo } from './Logo';
+import { AccountInfo } from './account/AccountInfo';
 import { ColorModeButton } from './ui/ColorMode';
 
 const HeaderDiv = styled.div`
@@ -15,7 +16,7 @@ const HeaderDiv = styled.div`
 const RightSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
 const Header: React.FC = () => {
@@ -23,11 +24,13 @@ const Header: React.FC = () => {
     <HeaderDiv>
       <Logo />
       <RightSection>
-        <AccountAvatar />
-        <ColorModeButton aria-label="Toggle color mode" />
+        <HStack>
+          <AccountInfo />
+          <ColorModeButton aria-label="Toggle color mode" />
+        </HStack>
       </RightSection>
     </HeaderDiv>
   );
 };
 
-export default Header;
+export { Header };
