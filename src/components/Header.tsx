@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import AccountAvatar from './AccountAvatar';
-import Logo from './Logo';
-import { ColorModeButton } from './ui/ColorMode';
+import { Logo } from './Logo';
+import { ColorModeButton } from './ui/colorMode';
+import { AccountInfo } from './account/SignIn.tsx';
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -15,7 +15,7 @@ const HeaderDiv = styled.div`
 const RightSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
 const Header: React.FC = () => {
@@ -23,11 +23,11 @@ const Header: React.FC = () => {
     <HeaderDiv>
       <Logo />
       <RightSection>
-        <AccountAvatar />
+        <AccountInfo />
         <ColorModeButton aria-label="Toggle color mode" />
       </RightSection>
     </HeaderDiv>
   );
 };
 
-export default Header;
+export { Header };

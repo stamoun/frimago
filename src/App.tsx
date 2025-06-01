@@ -1,8 +1,8 @@
 import { Theme } from '@chakra-ui/react';
 import styled from 'styled-components';
-import Body from './components/Body';
-import Footer from './components/Footer';
-import Header from './components/Header';
+import { Body } from './components/Body';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 import { Provider } from './components/ui/provider';
 
 const AppDiv = styled.div`
@@ -26,4 +26,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export { App };

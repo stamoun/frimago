@@ -1,6 +1,6 @@
 import { HStack, Select, SelectValueText, createListCollection, type SelectValueChangeDetails } from '@chakra-ui/react';
 import { ChevronDown, Factory } from 'lucide-react';
-import { useOfficeStore } from '../store/useOfficeStore';
+import { useOfficeStore } from '../store/officeStore';
 
 const OfficePicker = () => {
   const office = useOfficeStore((state) => state.office);
@@ -45,4 +45,4 @@ const items = createListCollection({
   ],
 });
 
-export default OfficePicker;
+export { OfficePicker };
