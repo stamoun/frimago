@@ -1,3 +1,4 @@
+export const GOOGLE_BUILDING = 'https://admin.googleapis.com/admin/directory/v1/customer/my_customer/resources/buildings'
 export const GOOGLE_CALENDAR = 'https://www.googleapis.com/auth/calendar';
 export const GOOGLE_CALENDAR_RESOURCES = 'https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly';
 export const GOOGLE_PROFILE = 'profile';

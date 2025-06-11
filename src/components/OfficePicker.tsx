@@ -1,5 +1,7 @@
 import { HStack, Select, SelectValueText, createListCollection, type SelectValueChangeDetails } from '@chakra-ui/react';
 import { ChevronDown, Factory } from 'lucide-react';
+import { useEffect } from 'react';
+import { getBuildings } from '../api/googleApi';
 import { useOfficeStore } from '../store/officeStore';
 
 const OfficePicker = () => {
@@ -11,6 +13,17 @@ const OfficePicker = () => {
       setOffice(details.value[0]);
     }
   };
+
+  useEffect(() => {
+    const fetchBuildings = async () => {
+      if (office) {
+        const buildings = await getBuildings();
+        console.log(buildings);
+      }
+    };
+
+    fetchBuildings();
+  }, [office]);
 
   return (
     <HStack>

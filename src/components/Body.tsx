@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useAuthStore } from '../store/authStore';
 import { OfficePicker } from './OfficePicker';
 
 const BodyDiv = styled.div`
@@ -9,11 +10,13 @@ const BodyDiv = styled.div`
 `;
 
 const Body: React.FC = () => {
+  const token = useAuthStore((state) => state.token);
   return (
     <BodyDiv>
-      <OfficePicker />
+      {token && <OfficePicker />}
     </BodyDiv>
   );
 };
 
 export { Body };
+

@@ -1,10 +1,10 @@
-import type { TokenResponse } from '@react-oauth/google';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import type { AppToken } from '../types/appToken';
 
 interface AuthStore {
-  token: TokenResponse | null;
-  setToken: (accessToken: TokenResponse | null) => void;
+  token: AppToken | null;
+  setToken: (accessToken: AppToken | null) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
