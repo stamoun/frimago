@@ -1,7 +1,7 @@
 import { Button, Popover, Portal } from '@chakra-ui/react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import React, { useCallback, useEffect, useState } from 'react'; // Import useRef
-import { getScopes, getUserInfo } from '../../api/googleApi';
+import { getUserInfo, getUserScopes } from '../../api/googleApi';
 import { GOOGLE_REQUIRED_SCOPES } from '../../constants';
 import { useAppUserInfoStore } from '../../store/appUserInfoStore';
 import { useAuthStore } from '../../store/authStore';
@@ -18,7 +18,11 @@ const AccountInfo: React.FC = () => {
   const handleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       try {
-        setToken(tokenResponse);
+        setToken({
+          accessToken: tokenResponse.access_token,
+          expiresIn: tokenResponse.expires_in,
+          scope: tokenResponse.scope,
+        });
       } catch (error) {
         setToken(null);
         console.error(error);
@@ -45,7 +49,7 @@ const AccountInfo: React.FC = () => {
         setAppUserInfo(null);
       }
     },
-    [setAppUserInfo]
+    [setAppUserInfo],
   );
 
   const resetData = useCallback(
@@ -54,14 +58,14 @@ const AccountInfo: React.FC = () => {
       setUserProfile(null);
       if (message) console.log(message);
     },
-    [setToken, setUserProfile]
+    [setToken, setUserProfile],
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      if (token?.access_token) {
+      if (token?.accessToken) {
         try {
-          const scopes = await getScopes();
+          const scopes = await getUserScopes();
 
           const missingScopes = getMissingEntries(GOOGLE_REQUIRED_SCOPES, scopes);
           if (missingScopes.length > 0) {
@@ -69,7 +73,7 @@ const AccountInfo: React.FC = () => {
             return;
           }
 
-          setUserProfile(token.access_token);
+          setUserProfile(token.accessToken);
         } catch (error) {
           resetData(`${error}`);
         } finally {

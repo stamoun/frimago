@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 interface OfficeStore {
-  office: string;
-  setOffice: (office: string) => void;
+  office: string | null;
+  setOffice: (office: string | null) => void;
 }
 
 export const useOfficeStore = create<OfficeStore>((set) => ({

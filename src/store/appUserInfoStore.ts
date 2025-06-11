@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { AppUserInfo } from '../utils/appUserInfo';
+import type { AppUserInfo } from '../types/appUserInfo';
 
 interface AppUserInfoStore {
   appUserInfo: AppUserInfo | null;
