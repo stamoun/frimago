@@ -1,5 +1,8 @@
+import type { Dayjs } from 'dayjs';
+
 export interface Room {
   id: string;
+  email: string;
   buildingId: string;
   name: string;
   type: string;
@@ -7,3 +10,10 @@ export interface Room {
 }
 
 export type Rooms = Room[];
+
+export interface RoomEvent {
+  id: string;
+  owner: string;
+  start: Dayjs;
+  end: Dayjs;
+}

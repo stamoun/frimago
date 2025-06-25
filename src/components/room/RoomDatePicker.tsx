@@ -10,7 +10,7 @@ const RoomDatePicker: React.FC = () => {
     <Group>
       <DatePickerInput
         leftSection={<Calendar size={18} />}
-        label="Choisissez une date"
+        label="Date"
         placeholder="Choisissez une date"
         value={pickedDate}
         onChange={setPickedDate}

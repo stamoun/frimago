@@ -1,13 +1,15 @@
 import axios, { HttpStatusCode } from 'axios';
+import dayjs from 'dayjs';
 import {
   GOOGLE_BUILDING_URL,
+  GOOGLE_CALENDAR_EVENTS_URL,
   GOOGLE_CALENDAR_RESOURCES_URL,
   GOOGLE_TOKEN_INFO_URL,
   GOOGLE_USER_INFO_URL,
 } from '../constants';
 import type { AppUserInfo } from '../types/appUserInfo';
 import type { Building } from '../types/buildings';
-import type { Rooms } from '../types/rooms';
+import type { RoomEvent, Rooms } from '../types/rooms';
 
 interface GoogleBuildingsResponse {
   buildings: GoogleBuilding[];
@@ -28,10 +30,31 @@ interface GoogleRessourceResponse {
 
 interface GoogleResource {
   resourceId: string;
+  resourceEmail: string;
   buildingId: string;
   resourceName: string;
   resourceType: string;
   userVisibleDescription: string;
+}
+
+interface GoogleResourceEvent {
+  id: string;
+  creator: {
+    email: string;
+  };
+  organizer: {
+    email: string;
+  };
+  start: {
+    dateTime: Date;
+  };
+  end: {
+    dateTime: Date;
+  };
+}
+
+interface GoogleResourceEventResponse {
+  items: GoogleResourceEvent[];
 }
 
 export async function getUserInfo(): Promise<AppUserInfo> {
@@ -86,12 +109,35 @@ export async function getRooms(): Promise<Rooms> {
   return rooms;
 }
 
+export async function getRoomEvents(roomId: string, timeMin: Date, timeMax: Date): Promise<RoomEvent[]> {
+  var params = new URLSearchParams();
+  params.append('timeMin', timeMin.toISOString());
+  params.append('timeMax', timeMax.toISOString());
+  params.append('eventTypes', 'default');
+  params.append('eventTypes', 'focusTime');
+  params.append('eventTypes', 'outOfOffice');
+  const response = await axios.get<GoogleResourceEventResponse>(`${GOOGLE_CALENDAR_EVENTS_URL}/${roomId}/events`, {
+    params,
+  });
+  return response.data.items.length > 0
+    ? response.data.items.map(({ id, organizer, creator, start, end }) => ({
+        id: id,
+        owner: organizer?.email || creator.email,
+        start: dayjs(start.dateTime),
+        end: dayjs(end.dateTime),
+      }))
+    : [];
+}
+
 function extractRooms(response: GoogleRessourceResponse): Rooms {
-  return response.items.map(({ resourceId, buildingId, resourceName, resourceType, userVisibleDescription }) => ({
-    id: resourceId,
-    buildingId,
-    name: resourceName,
-    type: resourceType,
-    description: userVisibleDescription,
-  }));
+  return response.items.map(
+    ({ resourceId, resourceEmail, buildingId, resourceName, resourceType, userVisibleDescription }) => ({
+      id: resourceId,
+      email: resourceEmail,
+      buildingId,
+      name: resourceName,
+      type: resourceType,
+      description: userVisibleDescription,
+    }),
+  );
 }

@@ -7,8 +7,8 @@ import { useRoomsStore } from '../store/roomsStore';
 import { useOfficeStore } from '../store/officeStore';
 import { Tabs } from '@mantine/core';
 import { LampDesk, Calendar } from 'lucide-react';
-import { RoomDatePicker } from './RoomDatePicker';
-import { RoomPicker } from './RoomPicker';
+import { RoomDatePicker } from './room/RoomDatePicker';
+import { RoomPicker } from './room/RoomPicker';
 
 const Body: React.FC = () => {
   const token = useAuthStore((state) => state.token);
@@ -34,7 +34,7 @@ const Body: React.FC = () => {
       }
     };
     retrieveBuildingData();
-  }, [setBuildings, setRooms, token]);
+  }, [setBuildings, token]);
 
   return (
     <div>

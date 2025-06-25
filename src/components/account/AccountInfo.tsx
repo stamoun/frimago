@@ -58,7 +58,7 @@ const AccountInfo: React.FC = () => {
     (message?: string) => {
       setToken(null);
       setUserProfile(null);
-      if (message) console.log(message);
+      if (message) console.warn(message);
     },
     [setToken, setUserProfile],
   );

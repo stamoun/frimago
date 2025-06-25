@@ -7,6 +7,8 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 import mantine from 'eslint-config-mantine';
 
+// TODO Fix react hooks dependency check
+
 export default tseslint.config(
   ...mantine,
   eslint.configs.recommended,
@@ -23,5 +25,5 @@ export default tseslint.config(
       },
     },
   },
-  { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}', './.storybook/main.ts'] },
+  { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}'] },
 );
