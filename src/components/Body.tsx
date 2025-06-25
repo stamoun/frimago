@@ -1,28 +1,20 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import { useAuthStore } from '../store/authStore';
 import { OfficePicker } from './OfficePicker';
-import { RoomPicker } from './RoomPicker';
 import { getBuildings, getRooms } from '../api/googleApi';
 import { useBuildingsStore } from '../store/buildingStore';
 import { useRoomsStore } from '../store/roomsStore';
-import { Tabs } from '@chakra-ui/react';
-
-import { Calendar, LampDesk } from 'lucide-react';
-import { RoomDatePicker } from './RoomDatePicker';
 import { useOfficeStore } from '../store/officeStore';
-
-const BodyDiv = styled.div`
-  width: 100%;
-  flex: 1 1 auto;
-  overflow: auto;
-`;
+import { Tabs } from '@mantine/core';
+import { LampDesk, Calendar } from 'lucide-react';
+import { RoomDatePicker } from './RoomDatePicker';
+import { RoomPicker } from './RoomPicker';
 
 const Body: React.FC = () => {
   const token = useAuthStore((state) => state.token);
+  const office = useOfficeStore((state) => state.office);
   const setBuildings = useBuildingsStore((state) => state.setBuildings);
   const setRooms = useRoomsStore((state) => state.setRooms);
-  const office = useOfficeStore((state) => state.office);
 
   useEffect(() => {
     const retrieveBuildingData = async () => {
@@ -45,33 +37,34 @@ const Body: React.FC = () => {
   }, [setBuildings, setRooms, token]);
 
   return (
-    <BodyDiv>
+    <div>
       {token && (
         <>
           <OfficePicker />
           {office && (
-            <Tabs.Root defaultValue="rooms">
+            <Tabs defaultValue="rooms">
               <Tabs.List>
-                <Tabs.Trigger value="rooms">
+                <Tabs.Tab value="rooms">
                   <LampDesk />
                   Bureau
-                </Tabs.Trigger>
-                <Tabs.Trigger value="dates">
+                </Tabs.Tab>
+                <Tabs.Tab value="dates">
                   <Calendar />
                   Date
-                </Tabs.Trigger>
+                </Tabs.Tab>
               </Tabs.List>
-              <Tabs.Content value="rooms">
+
+              <Tabs.Panel value="rooms">
                 <RoomPicker office={office} />
-              </Tabs.Content>
-              <Tabs.Content value="dates">
+              </Tabs.Panel>
+              <Tabs.Panel value="dates">
                 <RoomDatePicker />
-              </Tabs.Content>
-            </Tabs.Root>
+              </Tabs.Panel>
+            </Tabs>
           )}
         </>
       )}
-    </BodyDiv>
+    </div>
   );
 };
 

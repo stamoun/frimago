@@ -1,13 +1,21 @@
-import { HStack } from '@chakra-ui/react';
+import { Group } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import { Calendar } from 'lucide-react';
+import { useState } from 'react';
 
 const RoomDatePicker: React.FC = () => {
-  // const [pickedDate, setPickedDate] = useState(new Date());
+  const [pickedDate, setPickedDate] = useState<string | null>(null);
 
   return (
-    <HStack>
-      <h2>Choisissez une date</h2>
-      {/* <SingleDatepicker name="date-input" date={pickedDate} onDateChange={setPickedDate} /> */}
-    </HStack>
+    <Group>
+      <DatePickerInput
+        leftSection={<Calendar size={18} />}
+        label="Choisissez une date"
+        placeholder="Choisissez une date"
+        value={pickedDate}
+        onChange={setPickedDate}
+      />
+    </Group>
   );
 };
 

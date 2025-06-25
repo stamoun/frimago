@@ -1,0 +1,19 @@
+.logo {
+  font-size: xx-large;
+  gap: 0;
+}
+
+.fri {
+  color: var(--color-fun);
+  font-size: 2rem;
+}
+
+.ma {
+  color: var(--color-audace);
+  font-size: 2rem;
+}
+
+.go {
+  color: var(--color-entrepreneurship);
+  font-size: 2rem;
+}

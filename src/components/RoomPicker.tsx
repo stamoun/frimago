@@ -1,10 +1,9 @@
-import { createListCollection, HStack, Select, SelectValueText, type SelectValueChangeDetails } from '@chakra-ui/react';
-import { ChevronDown } from 'lucide-react';
-import { useBuildingsStore } from '../store/buildingStore';
-import { useCallback, useMemo } from 'react';
-import type { Rooms } from '../types/rooms';
-import { useRoomsStore } from '../store/roomsStore';
 import { groupBy } from 'es-toolkit';
+import { useMemo, useCallback, useEffect } from 'react';
+import { useBuildingsStore } from '../store/buildingStore';
+import { useRoomsStore } from '../store/roomsStore';
+import type { Rooms } from '../types/rooms';
+import { Group, Select } from '@mantine/core';
 
 const RoomTypes = {
   OPEN_OFFICES: 'Bureaux à aire ouverte',
@@ -63,7 +62,7 @@ function filterRooms(roomsData: Rooms): RoomOption[] {
 }
 
 interface RoomPickerProps {
-  office?: string;
+  office: string;
 }
 
 const RoomPicker: React.FC<RoomPickerProps> = ({ office }: RoomPickerProps) => {
@@ -78,47 +77,30 @@ const RoomPicker: React.FC<RoomPickerProps> = ({ office }: RoomPickerProps) => {
       }
       return acc;
     }, [] as Rooms);
-    return createListCollection({
-      items: filterRooms(roomsData).sort(sortRooms),
-    });
+    return filterRooms(roomsData).sort(sortRooms);
   }, [allBuildings, allRooms, office]);
 
-  const groupedRooms = useMemo(() => Object.entries(groupBy(availableRooms.items, getType)), [availableRooms.items]);
+  const groupedRooms = useMemo(() => {
+    const groups = Object.entries(groupBy(availableRooms, getType));
+    return groups.map((group) => ({ group: group[0], items: group[1] }));
+  }, [availableRooms]);
 
-  const handleRoomChanged = useCallback((details: SelectValueChangeDetails) => {
-    console.log('Selected room:', details.value);
+  useEffect(() => console.log(groupedRooms), [groupedRooms]);
+
+  const handleRoomChanged = useCallback((selectedRoom: any) => {
+    console.log('Selected room:', selectedRoom);
   }, []);
 
-  return office ? (
-    <HStack>
-      <h2>Choisissez un bureau</h2>
-      <Select.Root collection={availableRooms} value={office ? [office] : []} onValueChange={handleRoomChanged}>
-        <Select.HiddenSelect />
-        <Select.Control>
-          <Select.Trigger>
-            <SelectValueText />
-            <ChevronDown style={{ marginLeft: 8 }} />
-          </Select.Trigger>
-        </Select.Control>
-        <Select.Positioner>
-          <Select.Content>
-            {groupedRooms.map(([type, roomItems]) => (
-              <Select.ItemGroup key={type}>
-                <Select.ItemGroupLabel>{type}</Select.ItemGroupLabel>
-                {roomItems.map((roomItem) => (
-                  <Select.Item item={roomItem} key={roomItem.value}>
-                    {roomItem.label}
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                ))}
-              </Select.ItemGroup>
-            ))}
-          </Select.Content>
-        </Select.Positioner>
-      </Select.Root>
-    </HStack>
-  ) : (
-    <div>asdf </div>
+  return (
+    <Group>
+      <Select
+        label="Bureau"
+        placeholder="Choisissez un bureau"
+        data={groupedRooms}
+        onChange={handleRoomChanged}
+        searchable
+      />
+    </Group>
   );
 };
 

@@ -22,6 +22,7 @@ interface GoogleBuilding {
 }
 
 interface GoogleRessourceResponse {
+  nextPageToken?: string;
   items: GoogleResource[];
 }
 
@@ -68,11 +69,25 @@ export async function getBuildings(): Promise<Building[]> {
 }
 
 export async function getRooms(): Promise<Rooms> {
-  const response = await axios.get<GoogleRessourceResponse>(GOOGLE_CALENDAR_RESOURCES_URL);
-  if (response.status !== HttpStatusCode.Ok) {
-    throw 'Failed to retrieve resources.';
-  }
-  return response.data.items.map(({ resourceId, buildingId, resourceName, resourceType, userVisibleDescription }) => ({
+  let pageToken: string | undefined;
+  const rooms = [] as Rooms;
+
+  do {
+    const response = await axios.get<GoogleRessourceResponse>(GOOGLE_CALENDAR_RESOURCES_URL, { params: { pageToken } });
+    if (response.status !== HttpStatusCode.Ok) {
+      throw 'Failed to retrieve resources.';
+    }
+
+    pageToken = response.data.nextPageToken;
+    const extractedRooms = extractRooms(response.data);
+    rooms.push(...extractedRooms);
+  } while (pageToken);
+
+  return rooms;
+}
+
+function extractRooms(response: GoogleRessourceResponse): Rooms {
+  return response.items.map(({ resourceId, buildingId, resourceName, resourceType, userVisibleDescription }) => ({
     id: resourceId,
     buildingId,
     name: resourceName,

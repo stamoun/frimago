@@ -5,8 +5,10 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
+import mantine from 'eslint-config-mantine';
 
 export default tseslint.config(
+  ...mantine,
   eslint.configs.recommended,
   tseslint.configs.strict,
   tseslint.configs.stylistic,
@@ -20,5 +22,6 @@ export default tseslint.config(
         version: 'detect',
       },
     },
-  }
+  },
+  { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}', './.storybook/main.ts'] },
 );

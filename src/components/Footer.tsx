@@ -1,13 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
+import classes from './Footer.module.css';
 
-const FooterDiv = styled.div`
-  width: 100%;
-  font-size: small;
-`;
+// const FooterDiv = styled.div`
+//   width: 100%;
+//   font-size: small;
+// `;
 
 const Footer: React.FC = () => {
-  return <FooterDiv>&copy; Frima Studio</FooterDiv>;
+  return <div className={classes.footer}>&copy; Frima Studio</div>;
 };
 
 export { Footer };

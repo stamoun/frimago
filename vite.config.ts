@@ -7,18 +7,7 @@ export default defineConfig({
     react({
       babel: {
         presets: ['@babel/preset-typescript'],
-        plugins: [
-          '@babel/plugin-transform-typescript',
-          [
-            'babel-plugin-styled-components',
-            {
-              ssr: false,
-              pure: true,
-              displayName: true,
-              fileName: false,
-            },
-          ],
-        ],
+        plugins: ['@babel/plugin-transform-typescript'],
       },
     }),
   ],

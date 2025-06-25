@@ -1,21 +1,8 @@
 import type React from 'react';
 import { useAppUserInfoStore } from '../../store/appUserInfoStore';
-import styled from 'styled-components';
 import { useMemo } from 'react';
-
-const LoginInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5em;
-`;
-
-const AvatarImage = styled.img`
-  border-radius: 50%;
-  object-fit: cover;
-  height: 32px;
-  width: 32px;
-`;
+import { Avatar, Group, Text } from '@mantine/core';
+import { ChevronDown } from 'lucide-react';
 
 const AvatarInfo: React.FC = () => {
   const appUserInfo = useAppUserInfoStore((state) => state.appUserInfo);
@@ -23,10 +10,13 @@ const AvatarInfo: React.FC = () => {
   const avatarImage = useMemo(() => appUserInfo?.picture, [appUserInfo?.picture]);
 
   return (
-    <LoginInfo>
-      <AvatarImage src={avatarImage} alt="User avatar" />
-      {appUserInfo?.name}
-    </LoginInfo>
+    <Group gap={7}>
+      <Avatar src={avatarImage} alt={appUserInfo?.name} radius="xl" size={20} />
+      <Text fw={500} size="sm" lh={1} mr={3}>
+        {appUserInfo?.name}
+      </Text>
+      <ChevronDown size={12} />
+    </Group>
   );
 };
 

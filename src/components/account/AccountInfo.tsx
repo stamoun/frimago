@@ -1,4 +1,4 @@
-import { Button, Popover, Portal } from '@chakra-ui/react';
+import cx from 'clsx';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import React, { useCallback, useEffect, useState } from 'react'; // Import useRef
 import { getUserInfo, getUserScopes } from '../../api/googleApi';
@@ -6,8 +6,10 @@ import { GOOGLE_REQUIRED_SCOPES } from '../../constants';
 import { useAppUserInfoStore } from '../../store/appUserInfoStore';
 import { useAuthStore } from '../../store/authStore';
 import { getMissingEntries } from '../../utils/array';
-import { AccountMenu } from './AccountMenu';
 import { AvatarInfo } from './AvatarInfo';
+import { Group, Menu, Text, UnstyledButton } from '@mantine/core';
+import classes from './AccountInfo.module.css';
+import { LogIn, LogOut } from 'lucide-react';
 
 const AccountInfo: React.FC = () => {
   const setAppUserInfo = useAppUserInfoStore((state) => state.setAppUserInfo);
@@ -94,27 +96,30 @@ const AccountInfo: React.FC = () => {
   }, [resetData]);
 
   return token ? (
-    <Popover.Root
-      open={isLogoutVisible}
-      onOpenChange={(e) => setIsLogoutVisible(e.open)}
-      positioning={{ placement: 'bottom-end' }}>
-      <Popover.Trigger asChild>
-        <Button borderRadius={25} variant={'subtle'} padding={'0.5em'}>
+    <Menu
+      opened={isLogoutVisible}
+      onClose={() => setIsLogoutVisible(false)}
+      onOpen={() => setIsLogoutVisible(true)}
+      withArrow
+      withinPortal>
+      <Menu.Target>
+        <UnstyledButton className={cx(classes.button, { [classes.userActive]: isLogoutVisible })}>
           <AvatarInfo />
-        </Button>
-      </Popover.Trigger>
-      <Portal>
-        <Popover.Positioner>
-          <Popover.Content maxW={180}>
-            <Popover.Body>
-              <AccountMenu onLogout={handleLogout} />
-            </Popover.Body>
-          </Popover.Content>
-        </Popover.Positioner>
-      </Portal>
-    </Popover.Root>
+        </UnstyledButton>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item onClick={() => handleLogout()} leftSection={<LogOut size={16} />}>
+          <Text>Déconnexion</Text>
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   ) : (
-    <Button onClick={() => handleLogin()}>Connexion</Button>
+    <UnstyledButton className={classes.button} onClick={() => handleLogin()}>
+      <Group gap="xs">
+        <LogIn size={16} />
+        <Text>Connexion</Text>
+      </Group>
+    </UnstyledButton>
   );
 };
 
