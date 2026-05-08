@@ -34,7 +34,7 @@ const Body: React.FC = () => {
       }
     };
     retrieveBuildingData();
-  }, [setBuildings, token]);
+  }, [setBuildings, setRooms, token]);
 
   return (
     <div>

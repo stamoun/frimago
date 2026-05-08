@@ -7,8 +7,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 import mantine from 'eslint-config-mantine';
 
-// TODO Fix react hooks dependency check
-
 export default tseslint.config(
   ...mantine,
   eslint.configs.recommended,
