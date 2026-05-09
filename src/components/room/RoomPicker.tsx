@@ -95,7 +95,7 @@ const RoomPicker: React.FC<RoomPickerProps> = ({ office }: RoomPickerProps) => {
   }, [availableRooms]);
 
   const handleRoomChanged = useCallback(
-    (value: any) => {
+    (value: string | null) => {
       setSelectedRoom(value);
     },
     [setSelectedRoom],

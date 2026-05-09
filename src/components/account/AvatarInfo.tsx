@@ -1,10 +1,9 @@
-import type React from 'react';
+import { useMemo, type FC } from 'react';
 import { useAppUserInfoStore } from '../../store/appUserInfoStore';
-import { useMemo } from 'react';
 import { Avatar, Group, Text } from '@mantine/core';
 import { ChevronDown } from 'lucide-react';
 
-const AvatarInfo: React.FC = () => {
+const AvatarInfo: FC = () => {
   const appUserInfo = useAppUserInfoStore((state) => state.appUserInfo);
 
   const avatarImage = useMemo(() => appUserInfo?.picture, [appUserInfo?.picture]);

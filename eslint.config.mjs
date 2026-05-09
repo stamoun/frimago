@@ -22,6 +22,10 @@ export default tseslint.config(
         version: 'detect',
       },
     },
+    rules: {
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
+      'react/prop-types': 'off',
+    },
   },
   { ignores: ['**/*.{mjs,cjs,js,d.ts,d.mts}'] },
 );

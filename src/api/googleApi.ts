@@ -77,7 +77,7 @@ export async function getUserScopes(): Promise<string[]> {
   if (response.status !== HttpStatusCode.Ok) {
     throw new Error('Failed to retrieve token info.');
   }
-  return response.data['scope'].split(' ').sort();
+  return response.data.scope.split(' ').sort();
 }
 
 export async function getBuildings(): Promise<Building[]> {
@@ -111,7 +111,7 @@ export async function getRooms(): Promise<Rooms> {
 }
 
 export async function getRoomEvents(roomId: string, timeMin: Date, timeMax: Date): Promise<RoomEvent[]> {
-  var params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.append('timeMin', timeMin.toISOString());
   params.append('timeMax', timeMax.toISOString());
   params.append('eventTypes', 'default');
@@ -122,7 +122,7 @@ export async function getRoomEvents(roomId: string, timeMin: Date, timeMax: Date
   });
   return response.data.items.length > 0
     ? response.data.items.map(({ id, organizer, creator, start, end }) => ({
-        id: id,
+        id,
         owner: organizer?.email || creator.email,
         start: dayjs(start.dateTime),
         end: dayjs(end.dateTime),
