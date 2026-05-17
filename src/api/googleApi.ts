@@ -1,5 +1,6 @@
-import axios, { HttpStatusCode } from 'axios';
+import { HttpStatusCode } from 'axios';
 import dayjs from 'dayjs';
+import { api } from './client';
 import {
   GOOGLE_BUILDING_URL,
   GOOGLE_CALENDAR_EVENTS_URL,
@@ -58,8 +59,8 @@ interface GoogleResourceEventResponse {
 }
 
 export async function getUserInfo(): Promise<AppUserInfo> {
-  const response = await axios.get<AppUserInfo>(GOOGLE_USER_INFO_URL);
-  if (response.status == HttpStatusCode.Ok) {
+  const response = await api.get<AppUserInfo>(GOOGLE_USER_INFO_URL);
+  if (response.status === HttpStatusCode.Ok) {
     return {
       id: response.data.id,
       name: response.data.name,
@@ -68,21 +69,21 @@ export async function getUserInfo(): Promise<AppUserInfo> {
       picture: response.data.picture,
     };
   }
-  throw 'Failed to get user info.';
+  throw new Error('Failed to get user info.');
 }
 
 export async function getUserScopes(): Promise<string[]> {
-  const response = await axios.get(GOOGLE_TOKEN_INFO_URL);
+  const response = await api.get(GOOGLE_TOKEN_INFO_URL);
   if (response.status !== HttpStatusCode.Ok) {
-    throw 'Failed to retrieve token info.';
+    throw new Error('Failed to retrieve token info.');
   }
-  return response.data['scope'].split(' ').sort();
+  return response.data.scope.split(' ').sort();
 }
 
 export async function getBuildings(): Promise<Building[]> {
-  const response = await axios.get<GoogleBuildingsResponse>(GOOGLE_BUILDING_URL);
+  const response = await api.get<GoogleBuildingsResponse>(GOOGLE_BUILDING_URL);
   if (response.status !== HttpStatusCode.Ok) {
-    throw 'Failed to retrieve buildings.';
+    throw new Error('Failed to retrieve buildings.');
   }
   return response.data.buildings.map(({ address, buildingId, buildingName }) => ({
     id: buildingId,
@@ -96,9 +97,9 @@ export async function getRooms(): Promise<Rooms> {
   const rooms = [] as Rooms;
 
   do {
-    const response = await axios.get<GoogleRessourceResponse>(GOOGLE_CALENDAR_RESOURCES_URL, { params: { pageToken } });
+    const response = await api.get<GoogleRessourceResponse>(GOOGLE_CALENDAR_RESOURCES_URL, { params: { pageToken } });
     if (response.status !== HttpStatusCode.Ok) {
-      throw 'Failed to retrieve resources.';
+      throw new Error('Failed to retrieve resources.');
     }
 
     pageToken = response.data.nextPageToken;
@@ -110,18 +111,18 @@ export async function getRooms(): Promise<Rooms> {
 }
 
 export async function getRoomEvents(roomId: string, timeMin: Date, timeMax: Date): Promise<RoomEvent[]> {
-  var params = new URLSearchParams();
+  const params = new URLSearchParams();
   params.append('timeMin', timeMin.toISOString());
   params.append('timeMax', timeMax.toISOString());
   params.append('eventTypes', 'default');
   params.append('eventTypes', 'focusTime');
   params.append('eventTypes', 'outOfOffice');
-  const response = await axios.get<GoogleResourceEventResponse>(`${GOOGLE_CALENDAR_EVENTS_URL}/${roomId}/events`, {
+  const response = await api.get<GoogleResourceEventResponse>(`${GOOGLE_CALENDAR_EVENTS_URL}/${roomId}/events`, {
     params,
   });
   return response.data.items.length > 0
     ? response.data.items.map(({ id, organizer, creator, start, end }) => ({
-        id: id,
+        id,
         owner: organizer?.email || creator.email,
         start: dayjs(start.dateTime),
         end: dayjs(end.dateTime),

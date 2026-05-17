@@ -7,7 +7,6 @@ import { Body } from './components/Body';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { theme } from './theme';
-import './utils/axiosWrapper';
 import { env } from './utils/env';
 
 const App: React.FC = () => {
